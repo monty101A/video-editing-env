@@ -1,3 +1,11 @@
+---
+title: Video Editing Env
+emoji: 🎬
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+---
 # VideoEditingEnv 🎬
 
 A reinforcement learning environment for video editing tasks using OpenEnv framework.
