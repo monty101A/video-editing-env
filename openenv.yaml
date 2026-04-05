@@ -1,0 +1,29 @@
+name: video-editing-env
+version: "1.0.0"
+description: "A reinforcement learning environment for video editing tasks"
+author: "Aayush"
+tags:
+  - openenv
+  - video-editing
+  - reinforcement-learning
+
+tasks:
+  - name: easy
+    description: "Basic Trim - Remove unwanted footage"
+    max_steps: 5
+    reward_range: [0.0, 1.0]
+
+  - name: medium
+    description: "Keyframe Animation - Create motion graphics"
+    max_steps: 8
+    reward_range: [0.0, 1.0]
+
+  - name: hard
+    description: "Full Motion Graphics - Complete sequence"
+    max_steps: 12
+    reward_range: [0.0, 1.0]
+
+server:
+  port: 7860
+  host: "0.0.0.0"
+  
