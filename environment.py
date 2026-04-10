@@ -43,7 +43,7 @@ class VideoEditingEnvironment:
 
         return VideoEditingObservation(
             done=False,
-            reward=0.0,
+            reward=0.01,
             feedback=f"Task started: {self.task['description']}. Begin editing!",
             current_task=self.task["name"],
             steps_remaining=self.task["max_steps"],
@@ -53,7 +53,7 @@ class VideoEditingEnvironment:
     def step(self, action: VideoEditingAction) -> VideoEditingObservation:
         self.step_count += 1
         steps_remaining = self.task["max_steps"] - self.step_count
-        reward = 0.0
+        reward = 0.01
         feedback = ""
         hint = None
 
@@ -62,14 +62,14 @@ class VideoEditingEnvironment:
         if action.action_type in correct_actions:
             if action.action_type not in self.completed_actions:
                 self.completed_actions.append(action.action_type)
-                reward = 1.0 / len(correct_actions)
+                reward = 0.85 / len(correct_actions)
                 self.current_score += reward
                 feedback = f"✅ Great! '{action.action_type}' applied correctly!"
             else:
-                reward = -0.1
+                reward = 0.02
                 feedback = f"⚠️ '{action.action_type}' already done. Try next step!"
         else:
-            reward = -0.2
+            reward = 0.02
             feedback = f"❌ '{action.action_type}' is not correct here. Think again!"
 
         # Check remaining hints
@@ -83,8 +83,8 @@ class VideoEditingEnvironment:
 
         if all_done:
             self.done = True
-            reward += 0.5
-            self.current_score = min(1.0, self.current_score + 0.5)
+            reward = min(0.95, reward + 0.4)
+            self.current_score = min(0.95, self.current_score + 0.4)
             feedback = "🎉 Task Complete! All steps done perfectly!"
         elif out_of_steps:
             self.done = True
@@ -92,7 +92,7 @@ class VideoEditingEnvironment:
 
         return VideoEditingObservation(
             done=self.done,
-            reward=round(reward, 3),
+            reward=round(max(0.01, min(0.95, reward)), 3),
             feedback=feedback,
             current_task=self.task["name"],
             steps_remaining=max(0, steps_remaining),
@@ -104,7 +104,6 @@ class VideoEditingEnvironment:
             episode_id=self.episode_id,
             step_count=self.step_count,
             task_name=self.task_name,
-            current_score=round(self.current_score, 3),
+            current_score=round(max(0.01, min(0.95, self.current_score)), 3),
             max_steps=self.task["max_steps"],
         )
-    
